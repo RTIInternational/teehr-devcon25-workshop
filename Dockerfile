@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-gdal
 
 RUN pip install uv
-RUN uv pip install teehr --system
+RUN uv pip install teehr==0.4.10 --system
 RUN python -m teehr.utils.install_spark_jars
 
 # Runtime stage
@@ -40,6 +40,7 @@ COPY --from=builder /app /app
 
 COPY run_controller.sh launch/run_controller.sh
 RUN chmod +x /app/launch/run_controller.sh
+COPY notebooks /app/notebooks
 
 # Install JupyterLab
 RUN pip install --no-cache-dir jupyterlab
