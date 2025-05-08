@@ -67,31 +67,31 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
     }
     PS3='Choose one or more options for the TEEHR evaluation, then choose Done: '
     while :
-    do
-        clear
-        options=("Build the dataset ${run_opts[1]}" "Calculate Metrics ${run_opts[2]}" "Launch JupyterLab ${run_opts[3]}" "Done")
-        select run_opt in "${options[@]}"
         do
-            case $run_opt in
-                "Build the dataset ${run_opts[1]}")
-                    choice 1
-                    break
-                    ;;
-                "Calculate Metrics ${run_opts[2]}")
-                    choice 2
-                    break
-                    ;;
-                "Launch JupyterLab ${run_opts[3]}")
-                    choice 3
-                    break
-                    ;;
-                "Done")
-                    break 2
-                    ;;
-                *) printf '%s\n' 'invalid option';;
-            esac
+            clear
+            options=("Build the dataset ${run_opts[1]}" "Calculate Metrics ${run_opts[2]}" "Launch JupyterLab ${run_opts[3]}" "Done")
+            select run_opt in "${options[@]}"
+            do
+                case $run_opt in
+                    "Build the dataset ${run_opts[1]}")
+                        choice 1
+                        break
+                        ;;
+                    "Calculate Metrics ${run_opts[2]}")
+                        choice 2
+                        break
+                        ;;
+                    "Launch JupyterLab ${run_opts[3]}")
+                        choice 3
+                        break
+                        ;;
+                    "Done")
+                        break 2
+                        ;;
+                    *) printf '%s\n' 'invalid option';;
+                esac
+            done
         done
-    done
     run_opts_string=""
     for i in "${!run_opts[@]}"; do
         if [[ -n "${run_opts[$i]}" ]]; then
@@ -111,8 +111,8 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
         fi
     fi
     echo -e "${UYellow}Select an option (type a number): ${Color_Off}"
-    options=("Run TEEHR using existing local docker image" "Run TEEHR after updating to latest docker image" "Exit")
-    select option in "${options[@]}"; do
+    image_options=("Run TEEHR using existing local docker image" "Run TEEHR after updating to latest docker image" "Exit")
+    select option in "${image_options[@]}"; do
         case $option in
             "Run TEEHR using existing local docker image")
                 break
@@ -131,21 +131,20 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
         esac
     done
 
+    if docker inspect -f '{{.State.Running}}' "teehr-evaluation" 2>/dev/null; then
+        echo "The container is already running! Stopping it first..."
+        docker container stop teehr-evaluation
+        # Wait for the container to stop
+        while docker inspect -f '{{.State.Running}}' "teehr-evaluation" 2>/dev/null | grep -q true; do
+            sleep 10
+        done
+        sleep 2
+    fi
+
     if [[ ${run_opts[1]} || ${run_opts[2]} ]]; then
-        if docker inspect -f '{{.State.Running}}' "teehr-evaluation" 2>/dev/null; then
-            echo "The container is already running! Stopping it first..."
-            docker container stop teehr-evaluation
-            # Wait for the container to stop
-            while docker inspect -f '{{.State.Running}}' "teehr-evaluation" 2>/dev/null | grep -q true; do
-                sleep 10
-            done
-            sleep 2
-            docker run --rm --name teehr-evaluation -e RUN_OPTIONS=$run_opts_string -v $(pwd)/scripts:/app/scripts -v "$DATA_FOLDER_PATH:/app/data" "$IMAGE_NAME:$teehr_image_tag" run_teehr
-        else
-            # Run the TEEHR evaluation
-            echo "The container is not running, starting a new one..."
-            docker run --rm --name teehr-evaluation -e RUN_OPTIONS=$run_opts_string -v $(pwd)/scripts:/app/scripts -v "$DATA_FOLDER_PATH:/app/data" "$IMAGE_NAME:$teehr_image_tag" run_teehr
-        fi
+
+        docker run --rm --name teehr-evaluation -e RUN_OPTIONS=$run_opts_string -v $(pwd)/scripts:/app/scripts -v "$DATA_FOLDER_PATH:/app/data" "$IMAGE_NAME:$teehr_image_tag" run_teehr
+
         # Wait for the TEEHR evaluation to stop
         while docker inspect -f '{{.State.Running}}' "teehr-evaluation" 2>/dev/null | grep -q true; do
             sleep 1
