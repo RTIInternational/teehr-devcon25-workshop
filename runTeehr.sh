@@ -102,7 +102,7 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
 
     # Get the image tag.
     echo -e "${UYellow}Specify the TEEHR image tag to use: ${Color_Off}"
-    read -erp "Image tag (ex. v0.1.4, default: 'latest'): " teehr_image_tag
+    read -erp "Image tag (ex. v0.1.4, default: 'dev-con25'): " teehr_image_tag
     if [[ -z "$teehr_image_tag" ]]; then
         if uname -a | grep arm64 || uname -a | grep aarch64 ; then
             teehr_image_tag=latest
@@ -140,11 +140,11 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
                 sleep 10
             done
             sleep 2
-            docker run --rm --name teehr-evaluation -e RUN_OPTIONS=$run_opts_string -v "$DATA_FOLDER_PATH:/app/data" "$IMAGE_NAME:$teehr_image_tag" run_teehr
+            docker run --rm --name teehr-evaluation -e RUN_OPTIONS=$run_opts_string -v $(pwd)/scripts:/app/scripts -v "$DATA_FOLDER_PATH:/app/data" "$IMAGE_NAME:$teehr_image_tag" run_teehr
         else
             # Run the TEEHR evaluation
             echo "The container is not running, starting a new one..."
-            docker run --rm --name teehr-evaluation -e RUN_OPTIONS=$run_opts_string -v "$DATA_FOLDER_PATH:/app/data" "$IMAGE_NAME:$teehr_image_tag" run_teehr
+            docker run --rm --name teehr-evaluation -e RUN_OPTIONS=$run_opts_string -v $(pwd)/scripts:/app/scripts -v "$DATA_FOLDER_PATH:/app/data" "$IMAGE_NAME:$teehr_image_tag" run_teehr
         fi
         # Wait for the TEEHR evaluation to stop
         while docker inspect -f '{{.State.Running}}' "teehr-evaluation" 2>/dev/null | grep -q true; do

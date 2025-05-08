@@ -38,7 +38,6 @@ ENV GDAL_CONFIG=/usr/bin/gdal-config
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /app /app
 
-COPY scripts/ .
 COPY run_controller.sh launch/run_controller.sh
 RUN chmod +x /app/launch/run_controller.sh
 

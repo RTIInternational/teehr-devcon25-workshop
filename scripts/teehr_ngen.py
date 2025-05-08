@@ -174,6 +174,7 @@ def main(run_options: List[int]):
                 teehr.DeterministicMetrics.NashSutcliffeEfficiency(),
                 teehr.DeterministicMetrics.RelativeBias(),
                 teehr.DeterministicMetrics.RootMeanStandardDeviationRatio(),
+                teehr.DeterministicMetrics.RootMeanSquareError(),
             ]
         ).to_pandas()
         df.to_csv(Path(TEST_STUDY_DIR, "metrics.csv"), index=False)
