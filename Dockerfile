@@ -40,7 +40,6 @@ COPY --from=builder /app /app
 
 COPY run_controller.sh launch/run_controller.sh
 RUN chmod +x /app/launch/run_controller.sh
-COPY notebooks /app/notebooks
 
 # Install JupyterLab
 RUN pip install --no-cache-dir jupyterlab

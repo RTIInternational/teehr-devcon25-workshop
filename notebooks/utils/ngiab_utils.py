@@ -133,7 +133,7 @@ def get_gages_from_hydrofabric(folder_to_eval):
                 break
 
     if gpkg_file is None:
-        raise FileNotFoundError("No subset.gpkg file found in folder")
+        raise FileNotFoundError(f"No subset.gpkg file found in folder: {folder_to_eval}")
 
     # figure out if the hf is v20.1 or v2.2
     # 2.2 has a pois table, 20.1 does not

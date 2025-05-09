@@ -143,7 +143,7 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
 
     if [[ ${run_opts[1]} || ${run_opts[2]} ]]; then
 
-        docker run --rm --name teehr-evaluation -e RUN_OPTIONS=$run_opts_string -v $(pwd)/scripts:/app/scripts -v "$DATA_FOLDER_PATH:/app/data" "$IMAGE_NAME:$teehr_image_tag" run_teehr
+        docker run --rm --name teehr-evaluation -e RUN_OPTIONS=$run_opts_string -v $(pwd)/notebooks:/app/notebooks -v "$DATA_FOLDER_PATH:/app/data" "$IMAGE_NAME:$teehr_image_tag" run_teehr
 
         # Wait for the TEEHR evaluation to stop
         while docker inspect -f '{{.State.Running}}' "teehr-evaluation" 2>/dev/null | grep -q true; do
@@ -155,9 +155,9 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
     # Check if the run mode is 3 or 4
     if [[ ${run_opts[3]} ]]; then
         echo -e "${GREEN}Launching JupyterLab...${RESET}"
-        docker run --rm --name teehr-evaluation -d -p 8888:8888 -v "$DATA_FOLDER_PATH:/app/data"  "$IMAGE_NAME:$teehr_image_tag" run_jupyter
+        docker run --rm --name teehr-evaluation -d -p 8888:8888 -v $(pwd)/notebooks:/app/notebooks -v "$DATA_FOLDER_PATH:/app/data"  "$IMAGE_NAME:$teehr_image_tag" run_jupyter
         sleep 2
-        firefox http://localhost:8888/lab/tree/01_Explore_NGIAB_output.ipynb
+        firefox http://localhost:8888/lab/tree/01_TEEHR_NGIAB.ipynb
     fi
 
 else
