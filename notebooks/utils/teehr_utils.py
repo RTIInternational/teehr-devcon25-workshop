@@ -2,12 +2,23 @@
 import shutil
 from pathlib import Path
 from typing import Union
+import re
+import logging
 
 import teehr
 import pandas as pd
 import xarray as xr
 
 from utils import ngiab_utils
+
+logger = logging.getLogger(__name__)
+
+
+def sanitize_string(text):
+    """Remove special chars, convert whitespace and hyphens to underscore."""
+    text = re.sub(r'[^a-z0-9\s-]', '', text)
+    text = re.sub(r'[\s-]', '_', text)
+    return text.lower()
 
 
 def create_teehr_evaluation(
@@ -16,6 +27,7 @@ def create_teehr_evaluation(
     temp_dir: Union[str, Path],
     crosswalk_table_filepath: Union[str, Path],
     locations_filepath: Union[str, Path],
+    configuration_name: str,
 ):
     """
     Create a teehr evaluation object with the given parameters.
@@ -26,6 +38,8 @@ def create_teehr_evaluation(
     # Create an Evaluation object and create the directory
     ev = teehr.Evaluation(dir_path=teehr_evaluation_dir, create_dir=True)
     ev.clone_template()
+    ev.enable_logging()
+    ev.spark.sparkContext.setLogLevel("ERROR")
 
     # Nextgen-USGS
     ngen_usgs_gages = ngiab_utils.get_gages_from_hydrofabric(ngiab_output_dir)
@@ -72,7 +86,7 @@ def create_teehr_evaluation(
                 description="NWM Data"
             ),
             teehr.Configuration(
-                name="ngen",
+                name=configuration_name,
                 type="secondary",
                 description="Nextgen simulation output"
             )
@@ -92,6 +106,7 @@ def create_teehr_evaluation(
     )
     if len(troute_output_file_list) > 1:
         raise ValueError("More than one output file was found!")
+
     troute_output_nc_filepath = troute_output_file_list[0]
 
     troute_ds = xr.open_dataset(troute_output_nc_filepath)
@@ -111,7 +126,7 @@ def create_teehr_evaluation(
         constant_field_values={
             "unit_name": "m^3/s",
             "variable_name": "streamflow_hourly_inst",
-            "configuration_name": "ngen",
+            "configuration_name": configuration_name,
             "reference_time": None
         },
         location_id_prefix="ngen"
@@ -144,15 +159,21 @@ def calculate_metrics(
     Calculate metrics for the given teehr evaluation directory.
 
     """
+    logger.info(
+        "Calculating metrics for the TEEHR evaluation directory: %s",
+        teehr_evaluation_dir
+    )
     if not Path(teehr_evaluation_dir).exists():
         raise ValueError(
             "The TEEHR evaluation directory does not exist. "
             "Please run option 1 first."
         )
 
+    logger.info("Initializing teehr evaluation")
     ev = teehr.Evaluation(dir_path=teehr_evaluation_dir)
     ev.enable_logging()
 
+    logger.info("Calculating metrics")
     # Calculate some metrics
     df = ev.metrics.query(
         order_by=["primary_location_id", "configuration_name"],
