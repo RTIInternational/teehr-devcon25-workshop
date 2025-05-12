@@ -8,7 +8,9 @@
 - Docker image tag
 - Use local or remote docker image
 
-<img src="images/runTeehr_overview.svg">
+<p align="center">
+  <img src="images/runTeehr_overview.svg">
+</p>
 
 ## Notebook Execution Details
 - `notebooks/01_TEEHR_NGIAB.ipynb`
@@ -18,14 +20,15 @@
 ### 1. Creating the TEEHR Evaluation
 - `teehr_utils.create_teehr_evaluation()`
 - `ngiab_utils.py`
-<img src="images/create_teehr_evaluation.svg">
-
+<p align="center">
+  <img src="images/create_teehr_evaluation.svg">
+</p>
 
 ### 2. Calculating Performance Metrics
 - `teehr_utils.calculate_metrics()`
-
-<img src="images/calculate_metrics.svg">
-
+<p align="center">
+  <img src="images/calculate_metrics.svg">
+</p>
 
 ### 3. Open Interactive Session
-- Opens JupyterLab
+- Opens `01_TEEHR_NGIAB.ipynb` in JupyterLab
