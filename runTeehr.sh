@@ -65,7 +65,7 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
             run_opts[choice]=+
         fi
     }
-    PS3='Choose one or more options for the TEEHR evaluation, then choose Done: '
+    PS3='Select TEEHR run options (number+Enter), then choose Done and hit Enter: '
     while :
         do
             clear
