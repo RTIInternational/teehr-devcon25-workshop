@@ -21,6 +21,7 @@ cd teehr-devcon2025-workshop
 - Materials
   - Guides
   - Notebooks
+  - Scripts
 - Sample NGIAB data set(s).
 ```bash
 <NGIAB Output Dir>

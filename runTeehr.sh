@@ -73,7 +73,7 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
             select run_opt in "${options[@]}"
             do
                 case $run_opt in
-                    "Build the dataset ${run_opts[1]}")
+                    "Build the TEEHR Evaluation ${run_opts[1]}")
                         choice 1
                         break
                         ;;
