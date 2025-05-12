@@ -69,7 +69,7 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
     while :
         do
             clear
-            options=("Build the dataset ${run_opts[1]}" "Calculate Metrics ${run_opts[2]}" "Launch JupyterLab ${run_opts[3]}" "Done")
+            options=("Build the TEEHR Evaluation ${run_opts[1]}" "Calculate Metrics ${run_opts[2]}" "Launch JupyterLab ${run_opts[3]}" "Done")
             select run_opt in "${options[@]}"
             do
                 case $run_opt in
@@ -110,10 +110,12 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
             teehr_image_tag=teehr-devcon25
         fi
     fi
-    echo -e "${UYellow}Select an option (type a number): ${Color_Off}"
+
+    PS3="Select an option (type a number): "
+    # echo -e "${UYellow}Select an option (type a number): ${Color_Off}"
     image_options=("Run TEEHR using existing local docker image" "Run TEEHR after updating to latest docker image" "Exit")
-    select option in "${image_options[@]}"; do
-        case $option in
+    select img_option in "${image_options[@]}"; do
+        case $img_option in
             "Run TEEHR using existing local docker image")
                 break
                 ;;
