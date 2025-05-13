@@ -21,13 +21,13 @@
 - `teehr_utils.create_teehr_evaluation()`
 - `ngiab_utils.py`
 <p align="center">
-  <img src="images/create_teehr_evaluation.svg">
+  <img src="images/create_teehr_evaluation.png">
 </p>
 
 ### 2. Calculating Performance Metrics
 - `teehr_utils.calculate_metrics()`
 <p align="center">
-  <img src="images/calculate_metrics.svg">
+  <img src="images/calculate_metrics.png">
 </p>
 
 ### 3. Open Interactive Session
