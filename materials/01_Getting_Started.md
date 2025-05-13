@@ -7,7 +7,16 @@
 4. Tethys Visualization
 
 ## Setup/Intro
-- Log-in to JetStream desktop
+### Logging-in to JetStream desktop
+
+First establish an SSH connection:
+```bash
+ssh -L 5906:localhost:5906 exouser@<ip address>
+```
+
+Now in your VNC client go to `localhost:6`
+
+### Clone the github repo
 - Open the terminal (e.g., `ctrl+alt+t`)
 - Clone TEEHR-DevCon 2025 repo
 ```bash
@@ -18,11 +27,17 @@ git clone https://github.com/RTIInternational/teehr-devcon25-workshop.git
 ```bash
 cd teehr-devcon2025-workshop
 ```
-- Materials
-  - Guides
-  - Notebooks
-  - Scripts
-- Sample NGIAB data set(s).
+The repo contains:
+- Readme guides
+- Notebooks
+- Python scripts and utilities
+- `runTeehr.sh`
+
+ ### Take a look at the example NGIAB datasets
+
+- `/home/exouser/workshop/teehr/Example1...`
+- `/home/exouser/workshop/teehr/Example2...`
+
 ```bash
 <NGIAB Output Dir>
 ├── config

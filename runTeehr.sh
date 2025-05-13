@@ -46,6 +46,10 @@ check_last_path() {
 # Constants
 CONFIG_FILE="$HOME/.host_data_path.conf"
 
+if ! [ -e "$CONFIG_FILE" ]; then
+    touch "$CONFIG_FILE"
+fi
+
 check_last_path "$@"
 
 IMAGE_NAME=awiciroh/ngiab-teehr
