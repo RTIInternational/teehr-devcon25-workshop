@@ -9,7 +9,7 @@
 - Use local or remote docker image
 
 <p align="center">
-  <img src="images/runTeehr_overview.svg">
+  <img src="images/runTeehr_overview.png">
 </p>
 
 ## Notebook Execution Details
