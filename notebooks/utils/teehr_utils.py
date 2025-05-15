@@ -38,7 +38,6 @@ def create_teehr_evaluation(
     # Create an Evaluation object and create the directory
     ev = teehr.Evaluation(dir_path=teehr_evaluation_dir, create_dir=True)
     ev.clone_template()
-    # ev.enable_logging()
     ev.spark.sparkContext.setLogLevel("ERROR")
 
     # Nextgen-USGS
