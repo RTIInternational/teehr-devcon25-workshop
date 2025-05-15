@@ -119,7 +119,7 @@ def create_teehr_evaluation(
     troute_output_nc_filepath = troute_output_file_list[0]
     troute_ds = xr.open_dataset(troute_output_nc_filepath)
     troute_subset_filepath = Path(temp_dir, "troute_output_subset.nc")
-
+    # Subset the troute output to only the gages of interest
     ngen_gages = [int(gage.split("-")[1]) for gage in final_xwalk_df.secondary_location_id.tolist() if gage.split("-")[0] == "ngen"]
     troute_ds.sel(feature_id=ngen_gages).to_netcdf(troute_subset_filepath)
 
