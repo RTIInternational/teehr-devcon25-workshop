@@ -180,7 +180,7 @@ def calculate_metrics(
         )
 
     # ========================================================================
-    # Initialize the TEEHR Evalution.
+    # Initialize the TEEHR Evaluation.
     # ========================================================================
     logger.info("Initializing teehr evaluation")
     ev = teehr.Evaluation(dir_path=teehr_evaluation_dir)
