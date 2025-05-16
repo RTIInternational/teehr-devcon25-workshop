@@ -42,7 +42,7 @@ COPY run_controller.sh launch/run_controller.sh
 RUN chmod +x /app/launch/run_controller.sh
 
 # Install JupyterLab
-RUN pip install --no-cache-dir jupyterlab
+RUN pip install --no-cache-dir jupyterlab papermill
 
 # Expose the port that JupyterLab uses
 EXPOSE 8888

@@ -9,7 +9,8 @@ import teehr
 import pandas as pd
 import xarray as xr
 
-from utils import ngiab_utils
+from notebooks.utils import ngiab_utils
+# import ngiab_utils
 
 logger = logging.getLogger(__name__)
 
@@ -169,10 +170,6 @@ def calculate_metrics(
     Calculate metrics for the given teehr evaluation directory.
 
     """
-    logger.info(
-        "Calculating metrics for the TEEHR evaluation directory: %s",
-        teehr_evaluation_dir
-    )
     if not Path(teehr_evaluation_dir).exists():
         raise ValueError(
             "The TEEHR evaluation directory does not exist. "
@@ -184,6 +181,8 @@ def calculate_metrics(
     # ========================================================================
     logger.info("Initializing teehr evaluation")
     ev = teehr.Evaluation(dir_path=teehr_evaluation_dir)
+    ev.spark.sparkContext.setLogLevel("ERROR")
+    # ev.enable_logging()
 
     # ========================================================================
     # Specify the metrics, the data population(s), and execute the query.
