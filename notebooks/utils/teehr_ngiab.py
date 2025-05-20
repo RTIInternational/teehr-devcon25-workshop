@@ -9,8 +9,7 @@ import teehr
 import pandas as pd
 import xarray as xr
 
-from notebooks.utils import ngiab_utils
-# import ngiab_utils
+from utils import ngiab_utils
 
 logger = logging.getLogger(__name__)
 
