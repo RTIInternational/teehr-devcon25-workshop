@@ -35,7 +35,6 @@
     - get_gages_from_hydrofabric()
     - get_usgs_nwm30_crosswalk()
     - get_usgs_point_geometry()
-    - get_simulation_output_format()
     - get_simulation_start_end_time()
 <p align="center">
   <img src="images/create_teehr_evaluation.png">

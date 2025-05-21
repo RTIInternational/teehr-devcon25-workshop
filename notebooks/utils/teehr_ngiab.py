@@ -100,21 +100,15 @@ def create_teehr_evaluation(
     )
 
     # ========================================================================
-    # Load the NGIAB troute timeseries into TEEHR.
+    # Load the NGIAB troute *.nc timeseries into TEEHR.
     # ========================================================================
-    output_format = ngiab_utils.get_simulation_output_format(ngiab_output_dir)
-    if output_format == "netcdf":
-        pattern = "*.nc"
-    elif output_format == "csv":
-        pattern = "*.csv"
-        raise ValueError("CSV not yet implemented")
-    else:
-        raise ValueError("Invalid output format!")
     troute_output_file_list = list(
-        Path(ngiab_output_dir, "outputs/troute").glob(pattern)
+        Path(ngiab_output_dir, "outputs/troute").glob("*.nc")
     )
     if len(troute_output_file_list) > 1:
         raise ValueError("More than one output file was found!")
+    elif len(troute_output_file_list) == 0:
+        raise ValueError("No output .nc file was found!")
 
     troute_output_nc_filepath = troute_output_file_list[0]
     troute_ds = xr.open_dataset(troute_output_nc_filepath)
@@ -158,6 +152,7 @@ def create_teehr_evaluation(
         end_date=end_date
     )
 
+    # Pair the timeseries data
     ev.joined_timeseries.create(execute_scripts=False)
 
 
