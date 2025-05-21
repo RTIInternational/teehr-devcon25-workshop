@@ -35,11 +35,16 @@ def create_teehr_evaluation(
     """
     shutil.rmtree(teehr_evaluation_dir, ignore_errors=True)
 
-    # Create an Evaluation object and create the directory
+    # ========================================================================
+    # Create an Evaluation object and directory, using an empty template.
+    # ========================================================================
     ev = teehr.Evaluation(dir_path=teehr_evaluation_dir, create_dir=True)
     ev.clone_template()
     ev.spark.sparkContext.setLogLevel("ERROR")
 
+    # ========================================================================
+    # Create the temporary locations and crosswalk tables.
+    # ========================================================================
     # Nextgen-USGS
     ngen_usgs_gages = ngiab_utils.get_gages_from_hydrofabric(ngiab_output_dir)
     gages_df = pd.DataFrame(ngen_usgs_gages, columns=["ngen", "usgs"])
@@ -68,7 +73,9 @@ def create_teehr_evaluation(
     locations_df = usgs_point_geom[usgs_point_geom.id.isin(final_xwalk_df.primary_location_id)]  # noqa
     locations_df.to_parquet(locations_filepath)
 
-    # LOAD DATA INTO TEEHR
+    # ========================================================================
+    # Load the locations, crosswalk tables, and configurations into TEEHR.
+    # ========================================================================
     ev.locations.load_spatial(locations_filepath)
     ev.location_crosswalks.load_parquet(crosswalk_table_filepath)
 
@@ -92,26 +99,21 @@ def create_teehr_evaluation(
         ]
     )
 
-    output_format = ngiab_utils.get_simulation_output_format(ngiab_output_dir)
-    if output_format == "netcdf":
-        pattern = "*.nc"
-    elif output_format == "csv":
-        pattern = "*.csv"
-        raise ValueError("CSV not yet implemented")
-    else:
-        raise ValueError("Invalid output format!")
+    # ========================================================================
+    # Load the NGIAB troute *.nc timeseries into TEEHR.
+    # ========================================================================
     troute_output_file_list = list(
-        Path(ngiab_output_dir, "outputs/troute").glob(pattern)
+        Path(ngiab_output_dir, "outputs/troute").glob("*.nc")
     )
     if len(troute_output_file_list) > 1:
         raise ValueError("More than one output file was found!")
+    elif len(troute_output_file_list) == 0:
+        raise ValueError("No output .nc file was found!")
 
     troute_output_nc_filepath = troute_output_file_list[0]
-
     troute_ds = xr.open_dataset(troute_output_nc_filepath)
-
     troute_subset_filepath = Path(temp_dir, "troute_output_subset.nc")
-
+    # Subset the troute output to only the gages of interest
     ngen_gages = [int(gage.split("-")[1]) for gage in final_xwalk_df.secondary_location_id.tolist() if gage.split("-")[0] == "ngen"]
     troute_ds.sel(feature_id=ngen_gages).to_netcdf(troute_subset_filepath)
 
@@ -130,7 +132,10 @@ def create_teehr_evaluation(
         },
         location_id_prefix="ngen"
     )
-    # FETCHING
+
+    # ========================================================================
+    # Fetch and load the NWM and USGS streamflow timeseries into TEEHR.
+    # ========================================================================
     start_date, end_date = ngiab_utils.get_simulation_start_end_time(
         ngiab_output_dir
     )
@@ -147,6 +152,7 @@ def create_teehr_evaluation(
         end_date=end_date
     )
 
+    # Pair the timeseries data
     ev.joined_timeseries.create(execute_scripts=False)
 
 
@@ -158,20 +164,23 @@ def calculate_metrics(
     Calculate metrics for the given teehr evaluation directory.
 
     """
-    logger.info(
-        "Calculating metrics for the TEEHR evaluation directory: %s",
-        teehr_evaluation_dir
-    )
     if not Path(teehr_evaluation_dir).exists():
         raise ValueError(
             "The TEEHR evaluation directory does not exist. "
             "Please run option 1 first."
         )
 
+    # ========================================================================
+    # Initialize the TEEHR Evaluation.
+    # ========================================================================
     logger.info("Initializing teehr evaluation")
     ev = teehr.Evaluation(dir_path=teehr_evaluation_dir)
+    ev.spark.sparkContext.setLogLevel("ERROR")
     # ev.enable_logging()
 
+    # ========================================================================
+    # Specify the metrics, the data population(s), and execute the query.
+    # ========================================================================
     logger.info("Calculating metrics")
     # Calculate some metrics
     df = ev.metrics.query(
@@ -181,9 +190,11 @@ def calculate_metrics(
             teehr.DeterministicMetrics.KlingGuptaEfficiency(),
             teehr.DeterministicMetrics.NashSutcliffeEfficiency(),
             teehr.DeterministicMetrics.RelativeBias(),
-            teehr.DeterministicMetrics.RootMeanStandardDeviationRatio(),
-            teehr.DeterministicMetrics.RootMeanSquareError(),
-            teehr.DeterministicMetrics.PearsonCorrelation()
+            teehr.DeterministicMetrics.RootMeanStandardDeviationRatio()
         ]
     ).to_pandas()
+
+    # ========================================================================
+    # Save the results to a CSV file in the NGIAB directory.
+    # ========================================================================
     df.to_csv(metrics_csv_filepath, index=False)

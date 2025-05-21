@@ -137,11 +137,11 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
         esac
     done
 
-    if docker inspect -f '{{.State.Running}}' "teehr-evaluation" 2>/dev/null; then
+    if docker inspect -f '{{.State.Running}}' "teehr-evaluation"  > /dev/null 2>&1; then
         echo "The container is already running! Stopping it first..."
-        docker container stop teehr-evaluation
+        docker container stop teehr-evaluation  > /dev/null 2>&1
         # Wait for the container to stop
-        while docker inspect -f '{{.State.Running}}' "teehr-evaluation" 2>/dev/null | grep -q true; do
+        while docker inspect -f '{{.State.Running}}' "teehr-evaluation"  > /dev/null 2>&1 | grep -q true; do
             sleep 10
         done
         sleep 2
@@ -152,7 +152,7 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
         docker run --rm --name teehr-evaluation -e NGIAB_OUTPUT_DIR=$DATA_FOLDER_PATH -e RUN_OPTIONS=$run_opts_string -v $(pwd)/notebooks:/app/notebooks -v "$DATA_FOLDER_PATH:/app/data" "$IMAGE_NAME:$teehr_image_tag" run_teehr
 
         # Wait for the TEEHR evaluation to stop
-        while docker inspect -f '{{.State.Running}}' "teehr-evaluation" 2>/dev/null | grep -q true; do
+        while docker inspect -f '{{.State.Running}}' "teehr-evaluation"  > /dev/null 2>&1 | grep -q true; do
             sleep 1
         done
         echo -e "${GREEN}TEEHR evaluation complete.${RESET}\n"
