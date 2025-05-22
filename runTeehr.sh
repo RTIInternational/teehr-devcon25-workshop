@@ -163,7 +163,7 @@ if [[ "$run_teehr_choice" == [Yy]* ]]; then
         echo -e "${GREEN}Launching JupyterLab...${RESET}"
         docker run --rm --name teehr-evaluation -d -p 8888:8888 -e NGIAB_OUTPUT_DIR=$DATA_FOLDER_PATH -v $(pwd)/notebooks:/app/notebooks -v "$DATA_FOLDER_PATH:/app/data"  "$IMAGE_NAME:$teehr_image_tag" run_jupyter
         sleep 2
-        firefox http://localhost:8888/lab/tree/01_TEEHR_NGIAB.ipynb
+        firefox http://localhost:8888/lab/tree/01_TEEHR_Runner.ipynb
     fi
 
 else

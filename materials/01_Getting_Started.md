@@ -1,7 +1,7 @@
 # Output visualization through Tethys and evaluation customization using TEEHR
 
 ## Outline
-1. Setup -- Intro
+1. Setup/Intro
 2. NGIAB and TEEHR
 3. Exploring TEEHR Features
 4. Tethys Visualization

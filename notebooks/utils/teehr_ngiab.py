@@ -152,8 +152,8 @@ def create_teehr_evaluation(
         end_date=end_date
     )
 
-    # Pair the timeseries data
-    ev.joined_timeseries.create(execute_scripts=False)
+    # Pair the timeseries data, executing built-in calculated field scripts.
+    ev.joined_timeseries.create(execute_scripts=True)
 
 
 def calculate_metrics(

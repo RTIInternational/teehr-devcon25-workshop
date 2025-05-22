@@ -1,5 +1,10 @@
 # Coupling TEEHR with NGIAB in a Containerized Environment
-## `runTeehr.sh` Options:
+## The `runTeehr.sh` script
+
+<p align="center">
+  <img src="images/runTeehr_overview.png">
+</p>
+
 - `Last used data directory path`:
   - Path to NGIAB output directory.
 - `Select TEEHR run options`: To select/unselect an option, type the number then hit Enter.
@@ -8,16 +13,13 @@
   3. Launch JupyterLab
   4. Continue
 - `Specify the TEEHR image tag to use`:
-  - Docker image tag (we'll use the default)
+  - Docker image tag (we'll use the default, "teehr-devcon25")
 - `Select an option (type a number)`:
   - Use local or remote docker image
 
-<p align="center">
-  <img src="images/runTeehr_overview.png">
-</p>
 
 ### `Execute Notebook` Details:
-- `notebooks/01_TEEHR_NGIAB.ipynb`
+- `notebooks/01_TEEHR_Runner.ipynb`
 - `ngiab_utils.py`: Utilities for extracting data from NGIAB output.
 - `teehr_utils.py`: Utilities for creating the TEEHR Evaluation dataset.
 
@@ -51,4 +53,4 @@
 ---
 
 ### Option 3. Open Interactive Session
-- Opens `01_TEEHR_NGIAB.ipynb` in JupyterLab
+- Opens `01_TEEHR_Runner.ipynb` in JupyterLab
