@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-gdal
 
 RUN pip install uv
-RUN uv pip install teehr==0.4.11 --system
+RUN uv pip install teehr==0.4.12 --system
 RUN python -m teehr.utils.install_spark_jars
 
 # Runtime stage
