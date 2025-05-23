@@ -152,8 +152,8 @@ def create_teehr_evaluation(
         end_date=end_date
     )
 
-    # Pair the timeseries data, executing built-in calculated field scripts.
-    ev.joined_timeseries.create(execute_scripts=True)
+    # Pair the timeseries data.
+    ev.joined_timeseries.create(execute_scripts=False)
 
 
 def calculate_metrics(
@@ -176,7 +176,7 @@ def calculate_metrics(
     logger.info("Initializing teehr evaluation")
     ev = teehr.Evaluation(dir_path=teehr_evaluation_dir)
     ev.spark.sparkContext.setLogLevel("ERROR")
-    # ev.enable_logging()
+
 
     # ========================================================================
     # Specify the metrics, the data population(s), and execute the query.
