@@ -36,7 +36,7 @@ The repo contains:
  ### Take a look at the example NGIAB datasets
 
 - `/home/exouser/workshop/teehr/cat-491334-partial` - Contains pre-executed NGIAB output data.
-- `/home/exouser/workshop/teehr/ngen_bm_eval` - Contains pre-created TEEHR Evaluation dataset.
+- `/home/exouser/workshop/teehr/ngen_bm_eval4` - Contains pre-created TEEHR Evaluation dataset.
 
 ```bash
 <NGIAB Output Dir>
