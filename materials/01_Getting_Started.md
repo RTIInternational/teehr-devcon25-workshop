@@ -56,3 +56,6 @@ The repo contains:
         └── troute_output_<time_period>.nc*
 ```
 \* Needed for TEEHR
+
+### Check out the TEEHR Documentation
+https://rtiinternational.github.io/teehr/index.html
