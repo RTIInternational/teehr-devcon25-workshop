@@ -18,6 +18,10 @@ Now in your VNC client go to `localhost:6`
 
 ### Clone the github repo
 - Open the terminal (e.g., `ctrl+alt+t`)
+- Navigate into the TEEHR workshop folder
+```bash
+cd workshop/teehr
+```
 - Clone TEEHR-DevCon 2025 repo
 ```bash
 git clone https://github.com/RTIInternational/teehr-devcon25-workshop.git
@@ -57,5 +61,5 @@ The repo contains:
 ```
 \* Needed for TEEHR
 
-### Check out the TEEHR Documentation
+### Check out the TEEHR Documentation!
 https://rtiinternational.github.io/teehr/index.html
