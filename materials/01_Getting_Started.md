@@ -16,22 +16,27 @@ ssh -L 5906:localhost:5906 exouser@<ip address>
 
 Now in your VNC client go to `localhost:6`
 
-### Clone the github repo
+### Cloning the github repos
 - Open the terminal (e.g., `ctrl+alt+t`)
 - Navigate into the TEEHR workshop folder
 ```bash
 cd workshop/teehr
 ```
-- Clone TEEHR-DevCon 2025 repo
+- Clone the visualization repo:
+```bash
+git clone https://github.com/CIROH-UA/ngiab-client
+```
+
+- Clone the TEEHR-DevCon 2025 workshop repo
 ```bash
 git clone https://github.com/RTIInternational/teehr-devcon25-workshop.git
 ```
-- Navigate into the repo
+- To run TEEHR, navigate into the repo
 
 ```bash
 cd teehr-devcon2025-workshop
 ```
-The repo contains:
+This repo contains:
 - Readme guides
 - Notebooks
 - Python scripts and utilities
