@@ -16,6 +16,15 @@ ssh -L 5906:localhost:5906 exouser@<ip address>
 
 Now in your VNC client go to `localhost:6`
 
+### Quick caveat!
+
+if you do not have firefox installed, just run the following command:
+
+```bash
+sudo apt-get update && sudo apt-get install firefox --yes
+```
+Now let's continue! 
+
 ### Cloning the github repos
 - Open the terminal (e.g., `ctrl+alt+t`)
 - Navigate into the TEEHR workshop folder
